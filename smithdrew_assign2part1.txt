@@ -1,0 +1,62 @@
+PART 1
+**************************************************************************************
+//1.
+a.) add $t2,$t1,$t1 0x01295020
+	0000 0001 0010 1001 0101 0000 0010 0000
+
+b.) beq $t6, $t7,1000 0x11cf00f8 
+	0001 0001 1100 1111 0000 0000 1111 1000
+
+c.) j 0x845800 0x08211600 [j 0x845800 
+	0000 1000 0010 0001 0001 0110 0000 0000
+
+**************************************************************************************
+//2.
+ 		li $t0, 0					#i = 0 
+		li $t1, 0					#j = 0
+		li $t3, 1					$t3 = 1 / testCase
+
+		sltiu $t2, $t0, 5			#t2 = 1; if i < 5
+		beq	$t2, $t3, secondIf		#brach to second loop if i < 5
+		li $v0, 10					#exit from loop otherwsie
+		syscall
+
+secondIf:
+		sltiu $t2, $t0, 10			#t2 = 1, if i < 10
+		beq $t2, $t3, secondIf2		#branch to second if in second loop if i < 10
+		li $v0, 10					#exit from loop otherwise
+		syscall
+
+secondIf2:
+		sltiu $t2, $t1, 11			#t2 = 1 if j <= 10
+		beq $t2, $t3, print			#branch if t1 = 1(j <= 10)
+		li $v0, 10					#exit from loop otherwise
+		syscall
+
+print:
+		li $v0, 3					#load argument to print result
+		addi $a0, $t1, 0			#print j
+		syscall
+
+		li $v0, 10					#exit from function
+		syscall		
+
+
+**************************************************************************************
+//3.
+		li $t0, 0					#i = 0
+		li $t1, 1					#test register
+		addiu $t0, $t0, 2			#i = 2
+loop1		
+		sltiu $t2, $t0, 10			#for(i < 10)
+		beq $t2, $t1, loop2
+		li $v0, 10					#exit from loop
+		syscall
+loop2:	
+		addiu $t3, $t0, 0			#t3 = i
+		sll $t3, $t3, 1				#t3 = 2*i
+		addu $t0, $t3, $t0			#i + 2(i)
+		addiu $t0, $t0, 1			#increment i
+		j loop1
+**************************************************************************************
+
